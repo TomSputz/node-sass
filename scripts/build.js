@@ -88,6 +88,11 @@ var argv = Object.assign(Constants.DefaultOptions, yargs
     alias: 'd'
   }).argv);
 
+var ModuleDetails = Constants.ModuleVersions[argv.modulesVersion];
+if (!ModuleDetails) {
+  console.error('Unknown Node Modules Version: ' + argv.modulesVersion);
+  process.exit(1);
+}
 var gypOptions = {
   arch: argv.arch,
   jobs: argv.jobs,
@@ -104,11 +109,6 @@ if (!argv.force && fs.existsSync(BinaryPath)) {
   process.exit(0);
 }
 
-var ModuleDetails = Constants.ModuleVersions[argv.modulesVersion];
-if (!ModuleDetails) {
-  console.error('Unknown Node Modules Version: ' + argv.modulesVersion);
-  process.exit(1);
-}
 
 build(gypOptions, function (errorCode) {
   if (errorCode) {
